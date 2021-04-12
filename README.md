@@ -203,3 +203,57 @@ export default function Avatar() {
       <Avatar>M</Avatar>
   );
 ```
+
+
+## Gestion des states 
+
+Plus d'informations ici : https://reactjs.org/docs/hooks-reference.html#usestate
+
+Créer un state 
+
+```js
+  const [homeText, setHomeText] = React.useState('Bonjour les copains');
+}
+```
+
+Afficher un state 
+
+```js
+import React from 'react';
+
+export default function HomePage({}) {
+
+  const [homeText, setHomeText] = React.useState('Bonjour les copains');
+
+  return (
+    <div className="HomePage">
+      {homeText}
+    </div>
+  );
+}
+
+```
+
+Modifier un State 
+
+`homeText + 'Haha'` est la nouvelle valeur du state. 
+
+```js
+import React from 'react';
+
+export default function HomePage({}) {
+
+  const [homeText, setHomeText] = React.useState('Bonjour les copains');
+
+  return (
+    <div className="HomePage">
+      {homeText}
+      <button onClick={updateText}>Modifier</button>
+    </div>
+  );
+
+  function updateText() {
+    setHomeText(homeText + 'Haha');
+  }
+}
+```
