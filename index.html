@@ -15,13 +15,39 @@ Bonjour
 
 <script type="text/babel">
 
+  function Button(props) {
+    return (
+      <button onClick={props.onClick} style={{border: "none", backgroundColor: "pink"}}>{props.text}</button>
+    )
+  }
+
+  function Formulaire({onSubmit}) {
+    return (
+      <form style={{border: "solid"}} onSubmit={onSubmit}>
+        <input type="text"/>
+        <Button text="Envoyer" onClick={sendData}/>
+      </form>
+    );
+
+    function sendData() {
+      alert("Envoyer les données !");
+    }
+  }
+
   function App() {
     return (
       <div>
         <h2>Bonjour React</h2>
         <p>Bonjour</p>
+        <Button text="Coucou" onClick={() => alert("Coucou depuis App")}/>
+        <Formulaire onSubmit={submitForm}/>
       </div>
     )
+
+    function submitForm(event) {
+      event.preventDefault();
+      console.log("Prêt à envoyer les données !");
+    }
   }
 
   ReactDOM.render(<App/>, document.getElementById("root"));
