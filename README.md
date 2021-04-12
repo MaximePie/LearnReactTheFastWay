@@ -159,3 +159,47 @@ function App() {
 
 export default App;
 ```
+
+Puis séparer les différents composants dans d'autres fichiers créés à cet effet. 
+
+```js
+ 
+// Formulaire.jsx
+
+import React from 'react';
+import Button from "./Button";
+
+export default function Formulaire(props) {
+  return (
+    <form style={{border: "solid"}} onSubmit={onSubmit}>
+      <input type="text"/>
+      <Button text="Envoyer" onClick={sendData}/>
+    </form>
+  );
+
+  function sendData() {
+    alert("Envoyer les données !");
+  }
+}
+
+```
+
+
+## Installer une bibliothèque de composants 
+
+Installer Material-UI
+`yarn add @material-ui/core`
+
+Plus d'informations ici : https://material-ui.com/
+
+Générer un composant Material-ui : 
+
+```js
+import React from 'react';
+import Avatar from "@material-ui/core/Avatar";
+
+export default function Avatar() {
+  return (
+      <Avatar>M</Avatar>
+  );
+```
