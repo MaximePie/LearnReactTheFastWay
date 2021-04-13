@@ -39,6 +39,18 @@ export default function Formulaire({ onSubmit }) {
 
   function sendData() {
     alert("Envoyer les données !");
+    fetch('http://localhost:8000/api/createUser',
+      {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+          pass,
+          pseudo,
+        })
+      })
   }
 
   function checkPseudo () {

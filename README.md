@@ -482,3 +482,76 @@ export default function Formulaire({ onSubmit }) {
   }
 }
 ```
+
+
+## Echanger des données avec votre propre API
+
+Ici, on utilise une API symfony, présente dans api. 
+
+### Côté Symfony 
+
+Créer un controller permettant de créer un utilisateur 
+
+```php
+<?php
+// UserController.php
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class UserController extends AbstractController
+{
+    /**
+     * @Route("/api/createUser", name="user")
+     */
+    public function create(Request $request): Response
+    {
+        $content = $request->getContent();
+        $jsonParameters = json_decode($content, true);
+
+        // $jsonParameters['pass'] // Contient notre mot de passe
+        // $jsonParameters['pseudo'] // Contient notre pseudo
+
+        return new JsonResponse([
+            $jsonParameters,
+            "message" => "Bien reçu",
+        ]);
+    }
+}
+```
+
+Installer un système permettant de gérer les cors sur votre serveur Symfony. 
+
+`composer require cors`
+
+Lancer le serveur 
+
+`symfony server:start`
+
+
+### Côté React 
+
+Modifier la méthode `sendData` de manière à ce qu'elle contienne les informations suivantes 
+
+```js
+  function sendData() {
+    fetch('http://localhost:8000/api/createUser', // Il s'agit de l'adresse de l'API, assurez-vous que le serveur soit bien en train de tourner 
+      {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+          pass, // Passez vos éléments ici. 
+          pseudo,
+        })
+      })
+  }
+```
+
+
