@@ -257,3 +257,163 @@ export default function HomePage({}) {
   }
 }
 ```
+
+## Déclencher des effets de bord 
+
+Je vais compter le nombre de fois où j'ai cliqué grâce à un autre state.
+Au bout de trois, on va afficher un message pour dire "c'est bon lààà".
+À chaque fois qu'on clique sur le bouton, le state text change. On va créer un morceau de code à déclencher quand ce state change grâce à UseEffect.
+Quand text change, je veux modifier nombredmDeClick pour lui ajouter 1.
+
+Quand nbClick change, on va déclencher un autre morceau de code avec un autre effect.
+Quand nbClick change, s'il est supérieur ou égal à 3, on aimerait afficher un message d'erreur et empêcher l'utilisateur de cliquer encore.
+
+On va créer un state shouldErrorMessageBeDisplayed, false de base, qui va passer à True si on tape trois fois.
+
+On va modifier notre rendu de manière à ce que si isLimitReached est égal à True, on affiche un paragraphe avec un message, et on va désactiver le bouton.
+
+
+```jsx harmony
+import React, {useEffect} from 'react';
+
+export default function HomePage({}) {
+
+  const [homeText, setHomeText] = React.useState('Bonjour les copains');
+  const [numberOfTimesClicked, setNumberOfTimesClicked] = React.useState(-1);
+  const [shouldErrorMessageBeDisplayed, setErrorMessageDisplayState] = React.useState(false);
+
+  useEffect(() => {
+    if (numberOfTimesClicked > 3) {
+      setErrorMessageDisplayState(true);
+    }
+  }, [numberOfTimesClicked]);
+
+  useEffect(() => {
+    setNumberOfTimesClicked(numberOfTimesClicked + 1);
+  }, [homeText])
+
+  return (
+    <div className="HomePage">
+      <h2>Cliqué : {numberOfTimesClicked}</h2>
+      {shouldErrorMessageBeDisplayed ? "C'est bon làààà" : <p>{homeText}</p>}
+      <button disabled={shouldErrorMessageBeDisplayed} onClick={updateText}>Modifier</button>
+    </div>
+  );
+
+  function updateText() {
+    setHomeText(homeText + 'Haha');
+  }
+}
+```
+
+
+## Installer un système de routage 
+
+Plus d'informations : https://reactrouter.com/
+
+Installez le router, 
+
+`npm install react-router-dom`
+
+Mettre le router en place 
+
+```js
+// App.jsx 
+
+import './App.css';
+import Button from "./Button";
+import Formulaire from "./Formulaire";
+import HomePage from "./HomePage";
+import React from "react";
+import {BrowserRouter, NavLink, Route, Switch} from "react-router-dom";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <div>
+        <div>
+          <NavLink to='/'>Home</NavLink>
+          <NavLink to='/test'>Test</NavLink>
+          <NavLink to='/form'>Form</NavLink>
+        </div>
+        <Switch>
+          <Route path='/' exact>
+            <HomePage/>
+          </Route>
+          <Route path='/cats' exact>
+            <CatsPage/>
+          </Route>
+          <Route path='/test'>
+            <h2>Bonjour React</h2>
+            <p>Bonjour</p>
+            <Button text="Coucou" onClick={() => alert("Coucou depuis App")}/>
+          </Route>
+          <Route path='/form'>
+            <Formulaire onSubmit={submitForm}/>
+          </Route>
+        </Switch>
+      </div>
+    </BrowserRouter>
+  )
+
+  function submitForm(event) {
+    event.preventDefault();
+    console.log("Prêt à envoyer les données !");
+  }
+}
+
+export default App;
+
+```
+
+## Communiquer avec une API 
+
+Pour communiquer avec l'api, on utilise `fetch` de Javascript. 
+Documentation de l'api : https://docs.thecatapi.com/
+
+On utilise cette méthode personnalisée pour effectuer la récupération :
+
+```js
+  function fetchCatPicture() {
+    fetch('https://api.thecatapi.com/v1/images/search?limit=15').then(response => response.json()).then(response => {
+      console.log(response);
+      setCat(response);
+    })
+  }
+```
+
+Cette méthode met à jour la liste des chats avec `setCats`. 
+
+
+```js
+//CatsPage.jsx 
+
+import React, {useEffect} from 'react';
+
+export default function CatsPage() {
+
+  const [cats, setCat] = React.useState([]);
+
+  useEffect(fetchCatPicture, []);
+
+  return (
+    <div className="CatsPage">
+      C'est le component CatsPage
+      {cats.map(cat => (
+          <div>
+            <img style={{height: "90px", width: "90px"}} src={cat.url} alt=""/>
+          </div>
+        )
+      )}
+      <img src={cats} alt=""/>
+    </div>
+  );
+
+  function fetchCatPicture() {
+    fetch('https://api.thecatapi.com/v1/images/search?limit=15').then(response => response.json()).then(response => {
+      console.log(response);
+      setCat(response);
+    })
+  }
+}
+``

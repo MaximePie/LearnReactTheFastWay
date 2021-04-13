@@ -2,6 +2,7 @@ import './App.css';
 import Button from "./Button";
 import Formulaire from "./Formulaire";
 import HomePage from "./HomePage";
+import CatsPage from "./CatsPage";
 import React from "react";
 import {BrowserRouter, NavLink, Route, Switch} from "react-router-dom";
 
@@ -13,6 +14,7 @@ function App() {
           <NavLink to='/'>Home</NavLink>
           <NavLink to='/test'>Test</NavLink>
           <NavLink to='/form'>Form</NavLink>
+          <NavLink to='/cats'>CatsPage</NavLink>
         </div>
         <Switch>
           <Route path='/' exact>
@@ -25,6 +27,9 @@ function App() {
           </Route>
           <Route path='/form'>
             <Formulaire onSubmit={submitForm}/>
+          </Route>
+          <Route path='/cats' exact>
+            <CatsPage/>
           </Route>
         </Switch>
       </div>
